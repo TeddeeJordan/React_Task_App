@@ -1,0 +1,14 @@
+com/awesomeproject/MainApplication.java
+ com.AwesomeProject.MainApplication
+ com.AwesomeProject.MainApplication$1
+com/awesomeproject/ReactNativeFlipper.java
+ com.AwesomeProject.ReactNativeFlipper
+ com.AwesomeProject.ReactNativeFlipper$1
+ com.AwesomeProject.ReactNativeFlipper$2
+ com.AwesomeProject.ReactNativeFlipper$2$1
+com/facebook/react/PackageList.java
+ com.facebook.react.PackageList
+com/AwesomeProject/BuildConfig.java
+ com.AwesomeProject.BuildConfig
+com/awesomeproject/MainActivity.java
+ com.AwesomeProject.MainActivity
