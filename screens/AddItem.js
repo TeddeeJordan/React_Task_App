@@ -6,12 +6,17 @@ const AddItem = ({navigation}) => {
     return (
         <>
         <AddTask />
+        <View>
+          <Text>
+            
+        </Text>
         <TouchableOpacity
                 onPress={() => navigation.navigate('Home')}
                 style={styles.appButtonContainer}
             >
             <Text style={styles.appButtonText}>Return to Task List</Text>
-            </TouchableOpacity>
+          </TouchableOpacity>
+          </View>
       </>
     );
 };
