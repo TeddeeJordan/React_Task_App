@@ -3,30 +3,117 @@ import * as React from 'react';
 import {StyleSheet, View, Text, Button} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createDrawerNavigator } from '@react-navigation/drawer'
 import Home from '../screens/Home';
 import AddItem from '../screens/AddItem';
+import SignIn from '../screens/SignIn';
+import CreateAccount from '../screens/CreateAccount';
+import Profile from '../screens/Profile';
+import Basic from '../screens/Basic'
+import Splash from '../screens/Splash'
+import { AuthContext } from '../contexts/context'
 
-const Stack = createStackNavigator();
+const AuthStack = createStackNavigator();
+const Tabs = createBottomTabNavigator();
+const HomeStack = createStackNavigator();
+const Drawer = createDrawerNavigator();
 
-const AppStack = () => {
+const HomeStackScreen = () => (
+  <HomeStack.Navigator>
+    <HomeStack.Screen
+      name="Home"
+      component={Home}
+      options={{ title: 'To Do List' }}
+    />
+    <HomeStack.Screen
+      name="AddItem"
+      component={AddItem}
+      options={{ title: 'Add New Item' }}
+    />
+  </HomeStack.Navigator>
+)
 
+const TabsScreen = () => {
+  return(
+    <Tabs.Navigator>
+      <Tabs.Screen
+        name="Home"
+        component={HomeStackScreen}
+      />
+      <Tabs.Screen
+        name="Profile"
+        component={Profile}
+      />
+    </Tabs.Navigator>
+  )
+  
+}
+
+
+function AppStack(props) {
+  const [isLoading, setIsLoading] = React.useState(true);
+  const [userToken, setUserToken] = React.useState(null);
+
+  const authContext = React.useMemo(() => {
+    return {
+      signIn: () => {
+        setIsLoading(false);
+        setUserToken('thing');
+      },
+      signUp: () => {
+        setIsLoading(false);
+        setUserToken('thing');
+      },
+      signOut: () => {
+        setIsLoading(false);
+        setUserToken(null);
+      }
+    }
+  }, [])
+  
+  React.useEffect(() => {
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 1000);
+  }, []);
+
+  if (isLoading) {
+    return <Splash />
+  }
   
     return (
       <>
-        <NavigationContainer>
-          <Stack.Navigator initialRouteName="Home">
-            <Stack.Screen
-              name="Home"
-              component={Home}
-              options={{title: 'To Do List'}}
-            />
-            <Stack.Screen
-              name="AddItem"
-              component={AddItem}
-              options={{title: 'Add New Item'}}
-            />
-          </Stack.Navigator>
-        </NavigationContainer>
+        <AuthContext.Provider value={authContext}>
+          <NavigationContainer>
+            {userToken ?
+              <Drawer.Navigator initialRouteName="Home">
+              <Drawer.Screen
+                name="Home"
+                component={TabsScreen}
+              />
+              <Drawer.Screen
+                name="Basic"
+                component={Basic}
+              />
+            </Drawer.Navigator>
+          :
+          <AuthStack.Navigator initialRouteName="SignIn">
+            <AuthStack.Screen
+                name="SignIn"
+                component={SignIn}
+                options={{title: 'Please Sign In'}}
+              />
+              <AuthStack.Screen
+                name="CreateAccount"
+                component={CreateAccount}
+                options={{title: 'Please Create an Account'}}
+              />
+            </AuthStack.Navigator> 
+          }
+          </NavigationContainer>
+        </AuthContext.Provider>
+        
       </>
     );
 };

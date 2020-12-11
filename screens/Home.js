@@ -5,9 +5,8 @@ import todoData from '../tododata';
 
 const todoDataMap = todoData.map(item => <TaskItem key={item.id} item={item} />)
 
-console.log(todoDataMap)
 
-const Home = ({navigation}) => {
+function Home({navigation}) {
     return (
         <>
             <View></View>
