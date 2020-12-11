@@ -2,12 +2,7 @@ import React, {useState, useEffect} from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 
-const TaskItem = (props) => {
-
-    console.log("----------")
-    console.log(props)
-    console.log("xxxxxxxxxxxx")
-    console.log(props.item.text)
+function TaskItem(props) {
 
     const [isSelected, setSelection] = useState(props.item.completed);
 
@@ -16,7 +11,7 @@ const TaskItem = (props) => {
         <View style={styles.checkbox}>
             <CheckBox
                 value={isSelected}
-                    onValueChange={setSelection}
+                onValueChange={setSelection}
                     
             />
             <Text>{props.item.text}</Text>

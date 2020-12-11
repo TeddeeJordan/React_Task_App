@@ -7,14 +7,14 @@ const taskSchema = yup.object({
   task: yup.string()
     .required()
     .min(4),
-  priority: yup.number()
+  priority: yup.number() 
     .required()
     .test('is-num-1-10', 'Please enter a priorty between 1 and 10', (val) => {
       return(parseInt(val) <= 10 && (parseInt(val)) > 0)
   })
 })
 
-const AddTask = () => {
+function AddTask() {
 
   return(
   <Formik
