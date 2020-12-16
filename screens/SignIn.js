@@ -1,10 +1,15 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { Text } from 'react-native';
-import accounts from '../accounts';
 import { StyleSheet, View, TextInput, Button, TouchableOpacity } from 'react-native';
 import { Formik } from 'formik';
 import * as yup from 'yup'
-import { AuthContext } from '../contexts/context'
+import { useNavigation, CommonActions } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+import {ChangeAuth} from '../contexts/context'
+import utils from '../utils/utils'
+import Splash from './Splash'
+import accounts from '../accounts'
 
 
 const signinSchema = yup.object({
@@ -15,9 +20,36 @@ const signinSchema = yup.object({
 })
 
 
-
 function Signin({ navigation }) {
-  const { signIn } = React.useContext(AuthContext);
+  const logIn = React.useContext(ChangeAuth);
+  let item;
+  const handleSignIn = (props) => {
+    // console.log(props.username);
+    accounts.forEach((item) => {
+      if (item.username === props.username && item.password === props.password) {
+        AsyncStorage.setItem('auth', 'true');
+        AsyncStorage.setItem('username', props.username);
+        AsyncStorage.setItem('password', props.password);
+        logIn(true);
+      } 
+    });
+  }
+
+  const checkCookies = async () => {
+    await AsyncStorage.getItem('auth').then(res => {
+      if (res === 'true') {
+        // console.log('I automatically signed in');
+        logIn(true)
+      } else {
+        logIn(false);
+      }
+    })
+  }
+
+  useEffect(() => {
+    checkCookies();
+  }, []);
+
   return (
       <>
         <Formik
@@ -25,7 +57,8 @@ function Signin({ navigation }) {
     validationSchema={signinSchema}
       onSubmit={(values, actions) => {
         actions.resetForm(); 
-        signIn();
+        // console.log(values)
+        handleSignIn(values);
       }}
   >
     {({ handleChange, handleBlur, handleSubmit, values }) => (
