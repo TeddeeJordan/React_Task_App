@@ -1,10 +1,11 @@
 import React, {useState, useEffect} from 'react';
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import AddTask from '../components/AddTask';
 
 function AddItem({navigation}) {
-    return (
-        <>
+  return (
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+        <View>
         <AddTask />
         <View>
           <Text>
@@ -17,7 +18,8 @@ function AddItem({navigation}) {
             <Text style={styles.appButtonText}>Return to Task List</Text>
           </TouchableOpacity>
           </View>
-      </>
+      </View>
+      </TouchableWithoutFeedback>
     );
 };
   

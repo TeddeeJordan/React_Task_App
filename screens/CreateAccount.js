@@ -1,8 +1,10 @@
 import React from 'react';
-import { StyleSheet, View, TextInput, Button } from 'react-native';
+import { StyleSheet, View, TextInput, Button, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { Formik } from 'formik';
 import * as yup from 'yup';
 import { AuthContext } from '../contexts/context'
+import { acc } from 'react-native-reanimated';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const createAccountSchema = yup.object({
     username: yup.string()
@@ -21,15 +23,24 @@ const createAccountSchema = yup.object({
   })
 
 function CreateAccount({ navigation }) {
-    const { signUp } = React.useContext(AuthContext);
-    return (
-        <>
+  const { signUp } = React.useContext(AuthContext);
+  let accounts;
+  let item;
+  const handleSignIn = (props) => {
+    AsyncStorage.setItem('accounts', accounts += JSON.stringify(props));
+    console.log(accounts)
+    // logIn(true);
+
+  }
+  return (
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+        <View>
         <Formik
     initialValues={{ name: 'Name', email: 'Email', username: 'Username', password: 'Password' }}
     validationSchema={createAccountSchema}
       onSubmit={(values, actions) => {
         actions.resetForm(); 
-        signUp();
+        handleSignIn(values);
       }}
   >
     {({ handleChange, handleBlur, handleSubmit, values }) => (
@@ -53,6 +64,7 @@ function CreateAccount({ navigation }) {
             style={styles.formInput}
         />
         <TextInput
+            secureTextEntry={true}
             onChangeText={handleChange('password')}
             onBlur={handleBlur('password')}
             value={values.password}
@@ -67,7 +79,8 @@ function CreateAccount({ navigation }) {
           
     )}
             </Formik>
-            </>
+      </View>
+      </TouchableWithoutFeedback>
     )
 }
 

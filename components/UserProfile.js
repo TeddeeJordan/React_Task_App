@@ -6,9 +6,9 @@ function UserProfile(props) {
     return (
         <>
         <View>
-                <Text>User: {props.user.username}</Text>
-                <Text>Name: {props.user.name}</Text>
-                <Text>Email: {props.user.email}</Text>
+                <Text>User: {props.user}</Text>
+                <Text>Name: {props.name}</Text>
+                <Text>Email: {props.email}</Text>
         </View>
             
       </> 

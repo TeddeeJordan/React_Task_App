@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import { Text } from 'react-native';
-import { StyleSheet, View, TextInput, Button, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, TextInput, Button, TouchableOpacity, TouchableWithoutFeedback, Keyboard} from 'react-native';
 import { Formik } from 'formik';
 import * as yup from 'yup'
 import { useNavigation, CommonActions } from '@react-navigation/native';
@@ -9,7 +9,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {ChangeAuth} from '../contexts/context'
 import utils from '../utils/utils'
 import Splash from './Splash'
-import accounts from '../accounts'
+// import accounts from '../accounts'
 
 
 const signinSchema = yup.object({
@@ -22,17 +22,22 @@ const signinSchema = yup.object({
 
 function Signin({ navigation }) {
   const logIn = React.useContext(ChangeAuth);
+  
+
+
   let item;
-  const handleSignIn = (props) => {
-    // console.log(props.username);
-    accounts.forEach((item) => {
-      if (item.username === props.username && item.password === props.password) {
-        AsyncStorage.setItem('auth', 'true');
-        AsyncStorage.setItem('username', props.username);
-        AsyncStorage.setItem('password', props.password);
-        logIn(true);
-      } 
-    });
+  const handleSignIn = async (props) => {
+    const accounts = await AsyncStorage.getItem('accounts');
+    console.log(accounts)
+    // accounts.forEach((item) => {
+      console.log(accounts.username)
+    //   if (item.username === props.username && item.password === props.password) {
+    //     AsyncStorage.setItem('auth', 'true');
+    //     AsyncStorage.setItem('username', props.username);
+    //     AsyncStorage.setItem('password', props.password);
+    //     logIn(true);
+    //   } 
+    // });
   }
 
   const checkCookies = async () => {
@@ -51,7 +56,8 @@ function Signin({ navigation }) {
   }, []);
 
   return (
-      <>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+      <View>
         <Formik
     initialValues={{ username: 'Username', password: 'Password' }}
     validationSchema={signinSchema}
@@ -71,7 +77,8 @@ function Signin({ navigation }) {
             
 
           />
-          <TextInput
+              <TextInput
+                secureTextEntry={true}
              onChangeText={handleChange('password')}
             onBlur={handleBlur('password')}
                value={values.password}
@@ -93,8 +100,9 @@ function Signin({ navigation }) {
             >
             <Text style={styles.appButtonText}>Create an Account</Text>
             </TouchableOpacity>
-      </View>
-    </>
+        </View>
+        </View>
+    </TouchableWithoutFeedback>  
     
     )
 }
